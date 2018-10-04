@@ -3,7 +3,7 @@ import { FilePayload, Device, FilesPayload } from "nativescript-preview-sdk";
 declare global {
 	interface IPreviewAppLiveSyncService {
 		initialize(data: IPreviewAppLiveSyncData): void;
-		syncFiles(data: IPreviewAppLiveSyncData, filesToSync: string[]): Promise<void>;
+		syncFiles(data: IPreviewAppLiveSyncData, filesToSync: string[], filesToRemove: string[]): Promise<void>;
 		stopLiveSync(): Promise<void>;
 	}
 
