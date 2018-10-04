@@ -150,6 +150,7 @@ declare module Mobile {
 		getDeviceProjectRootPath(): Promise<string>;
 		deviceSyncZipPath?: string;
 		isLiveSyncSupported(): Promise<boolean>;
+		connectionTimeout?: number;
 	}
 
 	interface IDeviceAppDataFactory {

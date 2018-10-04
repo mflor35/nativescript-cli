@@ -29,6 +29,22 @@ export class AndroidLiveSyncService extends PlatformLiveSyncServiceBase implemen
 		return result;
 	}
 
+	public async fastSyncAction(device: Mobile.IDevice, liveSyncInfo: ILiveSyncWatchInfo): Promise<IAndroidLiveSyncResultInfo> {
+		const projectData = liveSyncInfo.projectData;
+		const deviceLiveSyncService = this.getDeviceLiveSyncService(device, projectData);
+		const syncInfo = _.merge<IFullSyncInfo>({ device, watch: true }, liveSyncInfo);
+		const deviceAppData = await this.getAppData(syncInfo);
+
+		deviceAppData.connectionTimeout = 500;
+		if (deviceLiveSyncService.beforeLiveSyncAction) {
+			await deviceLiveSyncService.beforeLiveSyncAction(deviceAppData);
+		}
+
+		const liveSyncResult = await super.liveSyncWatchAction(device, liveSyncInfo);
+		const result = await this.finalizeSync(device, liveSyncInfo.projectData, liveSyncResult);
+		return result;
+	}
+
 	public async fullSync(syncInfo: IFullSyncInfo): Promise<IAndroidLiveSyncResultInfo> {
 		const liveSyncResult = await super.fullSync(syncInfo);
 		const result = await this.finalizeSync(syncInfo.device, syncInfo.projectData, liveSyncResult);
