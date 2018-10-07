@@ -80,6 +80,8 @@ $injector.requireCommand("setup|*", "./commands/setup");
 $injector.requireCommand(["setup|cloud", "cloud|setup"], "./commands/setup");
 
 $injector.requirePublic("npm", "./node-package-manager");
+$injector.requirePublic("yarn", "./yarn-package-manager");
+$injector.requirePublic("packageManager", "./package-manager");
 $injector.require("npmInstallationManager", "./npm-installation-manager");
 $injector.require("dynamicHelpProvider", "./dynamic-help-provider");
 $injector.require("mobilePlatformsCapabilities", "./mobile-platforms-capabilities");

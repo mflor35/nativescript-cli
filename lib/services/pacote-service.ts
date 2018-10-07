@@ -4,7 +4,7 @@ import * as path from "path";
 
 export class PacoteService implements IPacoteService {
 	constructor(private $fs: IFileSystem,
-		private $npm: INodePackageManager,
+		private $packageManager: INodePackageManager,
 		private $proxyService: IProxyService,
 		private $logger: ILogger) { }
 
@@ -59,7 +59,7 @@ export class PacoteService implements IPacoteService {
 
 	private async getPacoteBaseOptions(): Promise<IPacoteBaseOptions> {
 		// In case `tns create myapp --template https://github.com/NativeScript/template-hello-world.git` command is executed, pacote module throws an error if cache option is not provided.
-		const cache = await this.$npm.getCachePath();
+		const cache = await this.$packageManager.getCachePath();
 		const pacoteOptions = { cache };
 		const proxySettings = await this.$proxyService.getCache();
 		if (proxySettings) {

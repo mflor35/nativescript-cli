@@ -34,7 +34,7 @@ function createTestInjector(): IInjector {
 }
 
 function mockNpm(testInjector: IInjector, versions: string[], latestVersion: string) {
-	testInjector.register("npm", {
+	testInjector.register("packageManager", {
 		view: async (packageName: string, config: any): Promise<string[]> => {
 			if (config.versions) {
 				return versions;

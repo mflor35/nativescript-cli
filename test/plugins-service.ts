@@ -1,6 +1,6 @@
 import { Yok } from '../lib/common/yok';
 import * as stubs from './stubs';
-import { NodePackageManager } from "../lib/node-package-manager";
+import { PackageManager } from "../lib/package-manager";
 import { NpmInstallationManager } from "../lib/npm-installation-manager";
 import { FileSystem } from "../lib/common/file-system";
 import { ProjectData } from "../lib/project-data";
@@ -42,7 +42,7 @@ let isErrorThrown = false;
 function createTestInjector() {
 	const testInjector = new Yok();
 	testInjector.register("messagesService", MessagesService);
-	testInjector.register("npm", NodePackageManager);
+	testInjector.register("packageManager", PackageManager);
 	testInjector.register("fs", FileSystem);
 	testInjector.register("adb", {});
 	testInjector.register("androidDebugBridgeResultHandler", {});
@@ -598,6 +598,7 @@ describe("Plugins service", () => {
 			});
 
 			unitTestsInjector.register("npm", {});
+			unitTestsInjector.register("packageManager", {});
 			unitTestsInjector.register("options", {});
 			unitTestsInjector.register("logger", {});
 			unitTestsInjector.register("errors", {});
