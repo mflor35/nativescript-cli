@@ -53,6 +53,7 @@ function createTestInjector(): IInjector {
 	testInjector.register("debugService", {});
 	testInjector.register("xmlValidator", {});
 	testInjector.register("npm", {});
+	testInjector.register("packageManager", {});
 	testInjector.register("debugDataService", {
 		createDebugData: () => ({})
 	});

@@ -7,7 +7,7 @@ import { ProjectNameService } from "../lib/services/project-name-service";
 import * as ProjectDataServiceLib from "../lib/services/project-data-service";
 import * as ProjectHelperLib from "../lib/common/project-helper";
 import { StaticConfig } from "../lib/config";
-import * as NpmLib from "../lib/node-package-manager";
+import * as NpmLib from "../lib/package-manager";
 import { NpmInstallationManager } from "../lib/npm-installation-manager";
 import { FileSystem } from "../lib/common/file-system";
 import * as path from "path";
@@ -130,7 +130,7 @@ class ProjectIntegrationTest {
 		});
 
 		this.testInjector.register("npmInstallationManager", NpmInstallationManager);
-		this.testInjector.register("npm", NpmLib.NodePackageManager);
+		this.testInjector.register("packageManager", NpmLib.PackageManager);
 		this.testInjector.register("httpClient", {});
 
 		this.testInjector.register("options", Options);
@@ -418,7 +418,7 @@ describe("Project Service Tests", () => {
 	describe("isValidNativeScriptProject", () => {
 		const getTestInjector = (projectData?: any): IInjector => {
 			const testInjector = new yok.Yok();
-			testInjector.register("npm", {});
+			testInjector.register("packageManager", {});
 			testInjector.register("errors", {});
 			testInjector.register("fs", {});
 			testInjector.register("logger", {});

@@ -36,7 +36,7 @@ describe("extensibilityService", () => {
 			readJson: (pathToFile: string): any => ({})
 		});
 		testInjector.register("logger", stubs.LoggerStub);
-		testInjector.register("npm", {});
+		testInjector.register("packageManager", {});
 		testInjector.register("settingsService", SettingsService);
 		testInjector.register("requireService", {
 			require: (pathToRequire: string): any => undefined
@@ -99,13 +99,13 @@ describe("extensibilityService", () => {
 				await assert.isRejected(extensibilityService.installExtension("extensionToInstall"), expectedErrorMessage);
 			});
 
-			it("when npm install fails", async () => {
+			it("when packageManager install fails", async () => {
 				const expectedErrorMessage = "Unable to install package";
 				const testInjector = getTestInjector();
 				const fs: IFileSystem = testInjector.resolve("fs");
 				fs.exists = (pathToCheck: string): boolean => true;
-				const npm: INodePackageManager = testInjector.resolve("npm");
-				npm.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => {
+				const packageManager: INodePackageManager = testInjector.resolve("packageManager");
+				packageManager.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => {
 					throw new Error(expectedErrorMessage);
 				};
 
@@ -114,7 +114,7 @@ describe("extensibilityService", () => {
 			});
 		});
 
-		describe("passes correct arguments to npm install", () => {
+		describe("passes correct arguments to packageManager install", () => {
 			const getArgsPassedToNpmInstallDuringInstallExtensionCall = async (userSpecifiedValue: string, testInjector?: IInjector): Promise<any> => {
 				testInjector = testInjector || getTestInjector();
 				const fs: IFileSystem = testInjector.resolve("fs");
@@ -122,9 +122,9 @@ describe("extensibilityService", () => {
 
 				fs.readDirectory = (dir: string): string[] => [userSpecifiedValue];
 
-				const npm: INodePackageManager = testInjector.resolve("npm");
+				const packageManager: INodePackageManager = testInjector.resolve("packageManager");
 				const argsPassedToNpmInstall: any = {};
-				npm.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => {
+				packageManager.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => {
 					argsPassedToNpmInstall.packageName = packageName;
 					argsPassedToNpmInstall.pathToSave = pathToSave;
 					argsPassedToNpmInstall.config = config;
@@ -152,7 +152,7 @@ describe("extensibilityService", () => {
 				await assertPackageNamePassedToNpmInstall(extensionName, path.resolve(extensionName));
 			});
 
-			it("passes save and save-exact options to npm install", async () => {
+			it("passes save and save-exact options to packageManager install", async () => {
 				const extensionName = "extension1";
 				const argsPassedToNpmInstall = await getArgsPassedToNpmInstallDuringInstallExtensionCall(extensionName);
 				const expectedNpmConfg: any = { save: true };
@@ -184,8 +184,8 @@ describe("extensibilityService", () => {
 
 			fs.readJson = () => ({ name: extensionName, version: "1.0.0" });
 
-			const npm: INodePackageManager = testInjector.resolve("npm");
-			npm.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => ({ name: extensionName, version: "1.0.0" });
+			const packageManager: INodePackageManager = testInjector.resolve("packageManager");
+			packageManager.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => ({ name: extensionName, version: "1.0.0" });
 
 			const extensibilityService: IExtensibilityService = testInjector.resolve(ExtensibilityService);
 			const actualResult = await extensibilityService.installExtension(extensionName);
@@ -243,8 +243,8 @@ describe("extensibilityService", () => {
 				mockFsReadJson(testInjector, extensionNames);
 
 				let isNpmInstallCalled = false;
-				const npm: INodePackageManager = testInjector.resolve("npm");
-				npm.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => {
+				const packageManager: INodePackageManager = testInjector.resolve("packageManager");
+				packageManager.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => {
 					assert.deepEqual(packageName, extensionNames[0]);
 					isNpmInstallCalled = true;
 					return { name: packageName };
@@ -345,9 +345,9 @@ describe("extensibilityService", () => {
 				};
 
 				let isNpmInstallCalled = false;
-				const npm: INodePackageManager = testInjector.resolve("npm");
+				const packageManager: INodePackageManager = testInjector.resolve("packageManager");
 				const expectedErrorMessage = `Unable to install to ${constants.NODE_MODULES_FOLDER_NAME} dir.`;
-				npm.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => {
+				packageManager.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => {
 					assert.deepEqual(packageName, extensionNames[0]);
 					isNpmInstallCalled = true;
 					throw new Error(expectedErrorMessage);
@@ -471,13 +471,13 @@ describe("extensibilityService", () => {
 				await assert.isRejected(extensibilityService.uninstallExtension("extensionToInstall"), expectedErrorMessage);
 			});
 
-			it("when npm uninstall fails", async () => {
+			it("when packageManager uninstall fails", async () => {
 				const expectedErrorMessage = "Unable to install package";
 				const testInjector = getTestInjector();
 				const fs: IFileSystem = testInjector.resolve("fs");
 				fs.exists = (pathToCheck: string): boolean => true;
-				const npm: INodePackageManager = testInjector.resolve("npm");
-				npm.uninstall = async (packageName: string, config?: any, p?: string): Promise<any> => {
+				const packageManager: INodePackageManager = testInjector.resolve("packageManager");
+				packageManager.uninstall = async (packageName: string, config?: any, p?: string): Promise<any> => {
 					throw new Error(expectedErrorMessage);
 				};
 
@@ -486,7 +486,7 @@ describe("extensibilityService", () => {
 			});
 		});
 
-		describe("passes correct arguments to npm uninstall", () => {
+		describe("passes correct arguments to packageManager uninstall", () => {
 			const getArgsPassedToNpmUninstallDuringUninstallExtensionCall = async (userSpecifiedValue: string, testInjector?: IInjector): Promise<any> => {
 				testInjector = testInjector || getTestInjector();
 				const fs: IFileSystem = testInjector.resolve("fs");
@@ -494,9 +494,9 @@ describe("extensibilityService", () => {
 
 				fs.readDirectory = (dir: string): string[] => [userSpecifiedValue];
 
-				const npm: INodePackageManager = testInjector.resolve("npm");
+				const packageManager: INodePackageManager = testInjector.resolve("packageManager");
 				const argsPassedToNpmInstall: any = {};
-				npm.uninstall = async (packageName: string, config?: any, p?: string): Promise<any> => {
+				packageManager.uninstall = async (packageName: string, config?: any, p?: string): Promise<any> => {
 					argsPassedToNpmInstall.packageName = packageName;
 					argsPassedToNpmInstall.pathToSave = p;
 					argsPassedToNpmInstall.config = config;
@@ -522,7 +522,7 @@ describe("extensibilityService", () => {
 				await assertPackageNamePassedToNpmUninstall(relativePathToExtension, relativePathToExtension);
 			});
 
-			it("passes save option to npm uninstall", async () => {
+			it("passes save option to packageManager uninstall", async () => {
 				const extensionName = "extension1";
 				const argsPassedToNpmUninstall = await getArgsPassedToNpmUninstallDuringUninstallExtensionCall(extensionName);
 				const expectedNpmConfg: any = { save: true };
@@ -550,8 +550,8 @@ describe("extensibilityService", () => {
 
 			fs.readDirectory = (dir: string): string[] => [extensionName];
 
-			const npm: INodePackageManager = testInjector.resolve("npm");
-			npm.uninstall = async (packageName: string, config?: any, p?: string): Promise<any> => [extensionName];
+			const packageManager: INodePackageManager = testInjector.resolve("packageManager");
+			packageManager.uninstall = async (packageName: string, config?: any, p?: string): Promise<any> => [extensionName];
 
 			const extensibilityService: IExtensibilityService = testInjector.resolve(ExtensibilityService);
 			await extensibilityService.uninstallExtension(extensionName);
@@ -624,8 +624,8 @@ describe("extensibilityService", () => {
 
 			fs.readDirectory = (dir: string): string[] => [extensionName];
 
-			const npm: INodePackageManager = testInjector.resolve("npm");
-			npm.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => ({ name: extensionName });
+			const packageManager: INodePackageManager = testInjector.resolve("packageManager");
+			packageManager.install = async (packageName: string, pathToSave: string, config?: any): Promise<any> => ({ name: extensionName });
 
 			const requireService: IRequireService = testInjector.resolve("requireService");
 			requireService.require = (pathToRequire: string) => {
@@ -810,8 +810,8 @@ describe("extensibilityService", () => {
 			it(testCase.name, async () => {
 				const testInjector = getTestInjector();
 				const expectedKeyword = "nativescript:extension";
-				const npm = testInjector.resolve<INodePackageManager>("npm");
-				npm.searchNpms = async (keyword: string): Promise<INpmsResult> => {
+				const packageManager = testInjector.resolve<INodePackageManager>("packageManager");
+				packageManager.searchNpms = async (keyword: string): Promise<INpmsResult> => {
 					assert.equal(keyword, expectedKeyword);
 					const result = <any>{
 						total: testCase.extensionsDefinitions.length,
@@ -830,7 +830,7 @@ describe("extensibilityService", () => {
 				};
 
 				const version = "1.0.0";
-				npm.getRegistryPackageData = async (packageName: string): Promise<any> => {
+				packageManager.getRegistryPackageData = async (packageName: string): Promise<any> => {
 					const extensionData = _.find(testCase.extensionsDefinitions, extData => extData.extensionName === packageName);
 					if (extensionData && extensionData.failRequestToRegistryNpm) {
 						throw new Error(`Request to registry.npmjs.org for package ${packageName} failed.`);
@@ -868,21 +868,21 @@ describe("extensibilityService", () => {
 		it("does not fail when request to npms fails", async () => {
 			const testInjector = getTestInjector();
 			const expectedKeyword = "nativescript:extension";
-			const npm = testInjector.resolve<INodePackageManager>("npm");
-			npm.searchNpms = async (keyword: string): Promise<INpmsResult> => {
+			const packageManager = testInjector.resolve<INodePackageManager>("packageManager");
+			packageManager.searchNpms = async (keyword: string): Promise<INpmsResult> => {
 				assert.equal(keyword, expectedKeyword);
 				throw new Error("Error");
 			};
 
 			let isGetRegistryPackageDataCalled = false;
-			npm.getRegistryPackageData = async (packageName: string): Promise<any> => {
+			packageManager.getRegistryPackageData = async (packageName: string): Promise<any> => {
 				isGetRegistryPackageDataCalled = true;
 			};
 
 			const extensibilityService = testInjector.resolve<IExtensibilityService>(ExtensibilityService);
 			const actualExtensionName = await extensibilityService.getExtensionNameWhereCommandIsRegistered(null);
 			assert.deepEqual(actualExtensionName, null);
-			assert.isFalse(isGetRegistryPackageDataCalled, "The method npm.getRegistryPackageData should not be called when npm.searchNpms fails.");
+			assert.isFalse(isGetRegistryPackageDataCalled, "The method packageManager.getRegistryPackageData should not be called when packageManager.searchNpms fails.");
 		});
 	});
 });
