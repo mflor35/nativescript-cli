@@ -123,7 +123,6 @@ $injector.requireCommand("platform|clean", "./commands/platform-clean");
 $injector.require("bundleValidatorHelper", "./helpers/bundle-validator-helper");
 $injector.require("liveSyncCommandHelper", "./helpers/livesync-command-helper");
 $injector.require("deployCommandHelper", "./helpers/deploy-command-helper");
-$injector.require("previewCommandHelper", "./helpers/preview-command-helper");
 
 $injector.requirePublicClass("localBuildService", "./services/local-build-service");
 $injector.requirePublicClass("liveSyncService", "./services/livesync/livesync-service");
@@ -178,6 +177,7 @@ $injector.requirePublic("assetsGenerationService", "./services/assets-generation
 $injector.require("filesHashService", "./services/files-hash-service");
 $injector.require("logParserService", "./services/log-parser-service");
 $injector.require("iOSDebuggerPortService", "./services/ios-debugger-port-service");
+$injector.require("hmrStatusService", "./services/hmr-status-service");
 
 $injector.require("pacoteService", "./services/pacote-service");
 $injector.require("qrCodeTerminalService", "./services/qr-code-terminal-service");

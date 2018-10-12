@@ -128,6 +128,8 @@ export class Logger implements ILogger {
 		const opts = {
 			unescape: true,
 			link: chalk.red,
+			strong: chalk.green.bold,
+			firstHeading: chalk.blue.bold,
 			tableOptions: {
 				chars: { 'mid': '', 'left-mid': '', 'mid-mid': '', 'right-mid': '' },
 				style: {
@@ -141,8 +143,15 @@ export class Logger implements ILogger {
 		};
 
 		marked.setOptions({ renderer: new TerminalRenderer(opts) });
+
 		const formattedMessage = marked(util.format.apply(null, args));
 		this.write(formattedMessage);
+	}
+
+	public printOnStderr(...args: string[]): void {
+		if (process.stderr) {
+			process.stderr.write(util.format.apply(null, args));
+		}
 	}
 
 	private getPasswordEncodedArguments(args: string[]): string[] {

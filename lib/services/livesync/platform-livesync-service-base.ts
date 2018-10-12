@@ -30,7 +30,7 @@ export abstract class PlatformLiveSyncServiceBase {
 	public async refreshApplication(projectData: IProjectData, liveSyncInfo: ILiveSyncResultInfo): Promise<void> {
 		if (liveSyncInfo.isFullSync || liveSyncInfo.modifiedFilesData.length) {
 			const deviceLiveSyncService = this.getDeviceLiveSyncService(liveSyncInfo.deviceAppData.device, projectData);
-			this.$logger.info("Refreshing application...");
+			this.$logger.info(`Refreshing application on device ${liveSyncInfo.deviceAppData.device.deviceInfo.identifier}...`);
 			await deviceLiveSyncService.refreshApplication(projectData, liveSyncInfo);
 		}
 	}
@@ -135,7 +135,8 @@ export abstract class PlatformLiveSyncServiceBase {
 			platform: syncInfo.device.deviceInfo.platform,
 			getDeviceProjectRootPath: () => this.$devicePathProvider.getDeviceProjectRootPath(syncInfo.device, deviceProjectRootOptions),
 			deviceSyncZipPath: this.$devicePathProvider.getDeviceSyncZipPath(syncInfo.device),
-			isLiveSyncSupported: async () => true
+			isLiveSyncSupported: async () => true,
+			connectTimeout: syncInfo.connectTimeout
 		};
 	}
 

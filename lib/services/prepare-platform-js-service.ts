@@ -101,12 +101,16 @@ export class PreparePlatformJSService extends PreparePlatformService implements 
 			const absoluteOutputPath = path.join(appDestinationDirectoryPath, constants.TNS_MODULES_FOLDER_NAME);
 			// Process node_modules folder
 			await this.$nodeModulesBuilder.prepareJSNodeModules({
-				absoluteOutputPath,
-				platform,
-				lastModifiedTime,
-				projectData,
-				appFilesUpdaterOptions,
-				projectFilesConfig
+				nodeModulesData: {
+					absoluteOutputPath,
+					platform,
+					lastModifiedTime,
+					projectData,
+					appFilesUpdaterOptions,
+					projectFilesConfig
+				},
+				release: appFilesUpdaterOptions.release,
+				copyNodeModules: true
 			});
 		} catch (error) {
 			this.$logger.debug(error);

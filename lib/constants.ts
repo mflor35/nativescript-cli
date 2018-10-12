@@ -76,7 +76,9 @@ export class ReleaseType {
 
 export const RESERVED_TEMPLATE_NAMES: IStringDictionary = {
 	"default": "tns-template-hello-world",
+	"javascript": "tns-template-hello-world",
 	"tsc": "tns-template-hello-world-ts",
+	"vue": "tns-template-blank-vue",
 	"typescript": "tns-template-hello-world-ts",
 	"ng": "tns-template-hello-world-ng",
 	"angular": "tns-template-hello-world-ng"
@@ -100,8 +102,14 @@ class ItunesConnectApplicationTypesClass implements IiTunesConnectApplicationTyp
 }
 
 export const ItunesConnectApplicationTypes = new ItunesConnectApplicationTypesClass();
+export const VUE_NAME = "vue";
 export const ANGULAR_NAME = "angular";
+export const JAVASCRIPT_NAME = "javascript";
 export const TYPESCRIPT_NAME = "typescript";
+export const NgFlavorName = "Angular";
+export const VueFlavorName = "Vue.js";
+export const TsFlavorName = "Plain TypeScript";
+export const JsFlavorName = "Plain JavaScript";
 export const BUILD_OUTPUT_EVENT_NAME = "buildOutput";
 export const CONNECTION_ERROR_EVENT_NAME = "connectionError";
 export const USER_INTERACTION_NEEDED_EVENT_NAME = "userInteractionNeeded";
@@ -178,9 +186,10 @@ export class AssetConstants {
 export class MacOSVersions {
 	public static Sierra = "10.12";
 	public static HighSierra = "10.13";
+	public static Mojave = "10.14";
 }
 
-export const MacOSDeprecationStringFormat = "Support for macOS %s is deprecated and will be removed in one of the next releases of NativeScript. Please, upgrade to the latest macOS version.";
+export const MacOSDeprecationStringFormat = "NativeScript does not support macOS %s and some functionality may not work. Please, upgrade to the latest macOS version.";
 export const PROGRESS_PRIVACY_POLICY_URL = "https://www.progress.com/legal/privacy-policy";
 export class SubscribeForNewsletterMessages {
 	public static AgreeToReceiveEmailMsg = "I agree".green.bold + " to receive email communications from Progress Software or its Partners (`https://www.progress.com/partners/partner-directory`)," +

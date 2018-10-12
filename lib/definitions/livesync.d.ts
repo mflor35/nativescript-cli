@@ -343,12 +343,20 @@ interface IShouldSkipEmitLiveSyncNotification {
 interface IAttachDebuggerOptions extends IDebuggingAdditionalOptions, IEnableDebuggingDeviceOptions, IIsEmulator, IPlatform, IOptionalOutputPath {
 }
 
-interface ILiveSyncWatchInfo extends IProjectDataComposition, IHasUseHotModuleReloadOption {
+interface IConnectTimeoutOption {
+	/**
+	 * Time to wait for successful connection. Defaults to 30000 miliseconds.
+	 */
+	connectTimeout?: number;
+}
+
+interface ILiveSyncWatchInfo extends IProjectDataComposition, IHasUseHotModuleReloadOption, IConnectTimeoutOption {
 	filesToRemove: string[];
 	filesToSync: string[];
 	isReinstalled: boolean;
 	syncAllFiles: boolean;
 	liveSyncDeviceInfo: ILiveSyncDeviceInfo;
+	hmrData: IPlatformHmrData;
 	force?: boolean;
 }
 
@@ -356,16 +364,22 @@ interface ILiveSyncResultInfo extends IHasUseHotModuleReloadOption {
 	modifiedFilesData: Mobile.ILocalToDevicePathData[];
 	isFullSync: boolean;
 	deviceAppData: Mobile.IDeviceAppData;
+	didRecover?: boolean
 }
 
 interface IAndroidLiveSyncResultInfo extends ILiveSyncResultInfo, IAndroidLivesyncSyncOperationResult { }
 
-interface IFullSyncInfo extends IProjectDataComposition, IHasUseHotModuleReloadOption {
+interface IFullSyncInfo extends IProjectDataComposition, IHasUseHotModuleReloadOption, IConnectTimeoutOption {
 	device: Mobile.IDevice;
 	watch: boolean;
 	syncAllFiles: boolean;
 	liveSyncDeviceInfo: ILiveSyncDeviceInfo;
 	force?: boolean;
+}
+
+interface IPlatformHmrData {
+	hash: string;
+	fallbackFiles: string[];
 }
 
 interface ITransferFilesOptions {
@@ -414,13 +428,6 @@ interface INativeScriptDeviceLiveSyncService extends IDeviceLiveSyncServiceBase 
 }
 
 interface IAndroidNativeScriptDeviceLiveSyncService extends INativeScriptDeviceLiveSyncService {
-	/**
-	 * Retrieves the android device's hash service.
-	 * @param  {string} appIdentifier Application identifier.
-	 * @return {Promise<Mobile.IAndroidDeviceHashService>} The hash service
-	 */
-	getDeviceHashService(appIdentifier: string): Mobile.IAndroidDeviceHashService;
-
 	/**
 	 * Guarantees all remove/update operations have finished
 	 * @param  {ILiveSyncResultInfo} liveSyncInfo Describes the LiveSync operation - for which project directory is the operation and other settings.
@@ -515,7 +522,7 @@ interface IDoSyncOperationOptions {
 	operationId?: string
 }
 
-interface IAndroidLivesyncToolConfiguration {
+interface IAndroidLivesyncToolConfiguration extends IConnectTimeoutOption {
 	/**
 	 * The application identifier.
 	 */
@@ -536,10 +543,6 @@ interface IAndroidLivesyncToolConfiguration {
 	 * If provider will call it when an error occurs.
 	 */
 	errorHandler?: any;
-	/**
-	 * Time to wait for successful connection. Defaults to 30000 miliseconds.
-	 */
-	connectTimeout?: number;
 }
 
 interface IAndroidLivesyncSyncOperationResult {

@@ -48,12 +48,12 @@ export function verifyNodeVersion(): void {
 	}
 
 	var nodeWarning = getNodeWarning();
-	if (nodeWarning) {
-		console.warn((os.EOL + nodeWarning + os.EOL).yellow.bold);
+	if (nodeWarning && nodeWarning.message) {
+		console.warn((`${os.EOL}${nodeWarning.message}${os.EOL}`).yellow.bold);
 	}
 }
 
-export function getNodeWarning(): string {
+export function getNodeWarning(): ISystemWarning {
 	var verificationOpts = getNodeVersionOpts();
 	var cliName = verificationOpts.cliName;
 	var supportedVersionsRange = verificationOpts.supportedVersionsRange;
@@ -78,6 +78,13 @@ export function getNodeWarning(): string {
 		}
 	}
 
-	return warningMessage;
+	if (warningMessage) {
+		return {
+			message: warningMessage,
+			severity: SystemWarningsSeverity.medium
+		};
+	}
+
+	return null;
 }
 /* tslint:enable */

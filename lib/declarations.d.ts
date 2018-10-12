@@ -508,7 +508,14 @@ interface IOptions extends IRelease, IDeviceIdentifier, IJustLaunch, IAvd, IAvai
 	frameworkVersion: string;
 	ipa: string;
 	tsc: boolean;
+	ts: boolean;
+	typescript: boolean;
 	ng: boolean;
+	angular: boolean;
+	vue: boolean;
+	vuejs: boolean;
+	js: boolean;
+	javascript: boolean;
 	androidTypings: boolean;
 	production: boolean; //npm flag
 	syncAllFiles: boolean;
@@ -516,7 +523,7 @@ interface IOptions extends IRelease, IDeviceIdentifier, IJustLaunch, IAvd, IAvai
 	inspector: boolean; // the counterpart to --chrome
 	background: string;
 	hmr: boolean;
-
+	link: boolean;
 }
 
 interface IEnvOptions {
