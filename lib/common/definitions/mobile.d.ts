@@ -118,6 +118,11 @@ declare module Mobile {
 	interface IAndroidDevice extends IDevice {
 		adb: Mobile.IDeviceAndroidDebugBridge;
 		init(): Promise<void>;
+		fileSystem: Mobile.IAndroidDeviceFileSystem;
+	}
+
+	interface IAndroidDeviceFileSystem extends IDeviceFileSystem {
+		getDeviceHashService(appIdentifier: string): Mobile.IAndroidDeviceHashService;
 	}
 
 	interface IiOSSimulator extends IDevice { }
@@ -144,7 +149,7 @@ declare module Mobile {
 		muted?: boolean;
 	}
 
-	interface IDeviceAppData extends IPlatform {
+	interface IDeviceAppData extends IPlatform, IConnectTimeoutOption {
 		appIdentifier: string;
 		device: Mobile.IDevice;
 		getDeviceProjectRootPath(): Promise<string>;
