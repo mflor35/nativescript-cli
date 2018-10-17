@@ -12,7 +12,7 @@ export class YarnPackageManager extends BasePackageManager implements INodePacka
 		private $hostInfo: IHostInfo,
 		private $httpClient: Server.IHttpClient,
 		private $logger: ILogger,
-		private $pacote: IPacoteService
+		private $pacoteService: IPacoteService
 	) {
 		super('yarn');
 	}
@@ -30,10 +30,10 @@ export class YarnPackageManager extends BasePackageManager implements INodePacka
 		const jsonContentBefore = this.$fs.readJson(packageJsonPath);
 
 		const flags = this.getFlagsString(config, true);
-		let params = ['add'];
+		let params = [];
 		const isInstallingAllDependencies = packageName === pathToSave;
 		if (!isInstallingAllDependencies) {
-			params.push(packageName);
+			params.push('add', packageName);
 		}
 
 		params = params.concat(flags);
@@ -46,7 +46,7 @@ export class YarnPackageManager extends BasePackageManager implements INodePacka
 				return null;
 			}
 
-			const packageMetadata = await this.$pacote.manifest(packageName, {});
+			const packageMetadata = await this.$pacoteService.manifest(packageName, {});
 			return {
 				name: packageMetadata.name,
 				version: packageMetadata.version
