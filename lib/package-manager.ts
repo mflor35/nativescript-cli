@@ -6,9 +6,10 @@ export class PackageManager implements INodePackageManager {
 	constructor(
 		private $npm: INodePackageManager,
 		private $options: IOptions,
-		private $yarn: INodePackageManager
+		private $yarn: INodePackageManager,
+		private $userSettingsService: IUserSettingsService
 	) {
-		this.packageManager = this._determinePackageManager();
+		this._determinePackageManager();
 	}
 	@exported("packageManager")
 	public install(packageName: string, pathToSave: string, config: INodePackageManagerInstallOptions): Promise<INpmInstallResultInfo> {
@@ -36,9 +37,14 @@ export class PackageManager implements INodePackageManager {
 		return this.packageManager.getCachePath();
 	}
 
-	private _determinePackageManager(): INodePackageManager {
-		console.log(`${JSON.stringify(this.$options.yarn)}`);
-		return this.$options.yarn ? this.$yarn : this.$npm;
+	private _determinePackageManager(): void {
+		this.$userSettingsService.getSettingValue('packageManager').then ( (pm: string) => {
+			if (pm === 'yarn' || this.$options.yarn) {
+				this.packageManager = this.$yarn;
+			} else {
+				this.packageManager = this.$npm;
+			}
+		});
 	}
 }
 
