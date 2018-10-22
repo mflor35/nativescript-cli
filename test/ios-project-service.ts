@@ -117,6 +117,9 @@ function createTestInjector(projectPath: string, projectName: string, xcode?: IX
 			pbxGroupByName() { /* */ }
 		}
 	});
+	testInjector.register("userSettingsService", {
+		getSettingValue: async (settingName: string): Promise<void> => undefined
+	});
 	testInjector.register("packageManager", PackageManager);
 	testInjector.register("npm", NodePackageManager);
 	testInjector.register("yarn", YarnPackageManager);
