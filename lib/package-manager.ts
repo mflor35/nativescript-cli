@@ -4,6 +4,7 @@ export class PackageManager implements INodePackageManager {
 	private packageManager: INodePackageManager;
 
 	constructor(
+		private $errors: IErrors,
 		private $npm: INodePackageManager,
 		private $options: IOptions,
 		private $yarn: INodePackageManager,
@@ -44,6 +45,8 @@ export class PackageManager implements INodePackageManager {
 			} else {
 				this.packageManager = this.$npm;
 			}
+		}, (err) => {
+			this.$errors.fail(`Unable to read package manager config from user settings ${err}`);
 		});
 	}
 }

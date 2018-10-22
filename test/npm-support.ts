@@ -67,6 +67,9 @@ function createTestInjector(): IInjector {
 	testInjector.register("hooksService", stubs.HooksServiceStub);
 	testInjector.register("nodeModulesBuilder", NodeModulesLib.NodeModulesBuilder);
 	testInjector.register("pluginsService", PluginsServiceLib.PluginsService);
+	testInjector.register("userSettingsService", {
+		getSettingValue: async (settingName: string): Promise<void> => undefined
+	});
 	testInjector.register("npm", NpmLib.NodePackageManager);
 	testInjector.register("packageManager", PackageManagerLib.PackageManager);
 	testInjector.register("yarn", YarnLib.YarnPackageManager);

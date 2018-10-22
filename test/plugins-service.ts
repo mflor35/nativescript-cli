@@ -44,6 +44,9 @@ let isErrorThrown = false;
 function createTestInjector() {
 	const testInjector = new Yok();
 	testInjector.register("messagesService", MessagesService);
+	testInjector.register("userSettingsService", {
+		getSettingValue: async (settingName: string): Promise<void> => undefined
+	});
 	testInjector.register("packageManager", PackageManager);
 	testInjector.register("npm", NodePackageManager);
 	testInjector.register("yarn", YarnPackageManager);

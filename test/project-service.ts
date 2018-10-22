@@ -132,6 +132,9 @@ class ProjectIntegrationTest {
 		});
 
 		this.testInjector.register("npmInstallationManager", NpmInstallationManager);
+		this.testInjector.register("userSettingsService", {
+			getSettingValue: async (settingName: string): Promise<void> => undefined
+		});
 		this.testInjector.register("npm", NpmLib.NodePackageManager);
 		this.testInjector.register("yarn", YarnLib.YarnPackageManager);
 		this.testInjector.register("packageManager", PackageManagerLib.PackageManager);
