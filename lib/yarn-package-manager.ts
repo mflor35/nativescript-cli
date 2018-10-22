@@ -53,7 +53,6 @@ export class YarnPackageManager extends BasePackageManager implements INodePacka
 			};
 
 		} catch (e) {
-			// EPeerInvalid?
 			this.$fs.writeJson(packageJsonPath, jsonContentBefore);
 			throw e;
 		}
